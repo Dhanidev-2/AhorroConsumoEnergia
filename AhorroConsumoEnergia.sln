@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AhorroConsumoEnergia", "AhorroConsumoEnergia\AhorroConsumoEnergia.csproj", "{276463B6-5511-45BD-81D5-3EF8F6DD0D93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AhorroConsumoEnergia_Test", "AhorroConsumoEnergia_Test\AhorroConsumoEnergia_Test.csproj", "{F613EEFF-E6DB-4351-A6F4-649098A6BC4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{276463B6-5511-45BD-81D5-3EF8F6DD0D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{276463B6-5511-45BD-81D5-3EF8F6DD0D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{276463B6-5511-45BD-81D5-3EF8F6DD0D93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F613EEFF-E6DB-4351-A6F4-649098A6BC4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F613EEFF-E6DB-4351-A6F4-649098A6BC4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F613EEFF-E6DB-4351-A6F4-649098A6BC4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F613EEFF-E6DB-4351-A6F4-649098A6BC4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

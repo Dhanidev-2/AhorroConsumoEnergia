@@ -8,14 +8,17 @@ namespace AhorroConsumoEnergia
 {
     public class FuncionesCalculo
     {
-        public static void CalcularValorPagarEnergia(Dictionary<int, Dictionary<string, int>> clientes)
+
+        public static void CalcularValorPagarEnergia(List<ListaUsuario> usuario)
         {
             Console.Write("Ingrese el número de cédula del cliente: ");
             int cedula = Convert.ToInt32(Console.ReadLine());
 
-            if (clientes.ContainsKey(cedula)) //Busca la cedula del cliente en el diccionario clientes
+            ListaUsuario clienteEncontrado = usuario.Find(x => x.Cedula == cedula);
+
+            if (clienteEncontrado != null)
             {
-                int valorPagarEnergia = ValorPagarEnergia(clientes[cedula]["meta_ahorro_energia"], clientes[cedula]["consumo_actual_energia"]);
+                int valorPagarEnergia = ValorPagarEnergia(clienteEncontrado.meta_ahorro_energia, clienteEncontrado.consumo_actual_energia);
                 Console.WriteLine($"Valor a pagar por servicios de energía: ${valorPagarEnergia}");
             }
             else
@@ -32,15 +35,17 @@ namespace AhorroConsumoEnergia
             return valorParcial - valorIncentivo;
         }
 
-        public static void CalcularValorPagarAgua(Dictionary<int, Dictionary<string, int>> clientes)
+        public static void CalcularValorPagarAgua(List<ListaUsuario> usuario)
         {
             Console.Write("Ingrese el número de cédula del cliente: ");
             int cedula = Convert.ToInt32(Console.ReadLine());
 
-            if (clientes.ContainsKey(cedula))
+            ListaUsuario clienteEncontrado = usuario.Find(x => x.Cedula == cedula);
+
+            if (clienteEncontrado != null)
             {
-                int valorPagarAgua = ValorPagarAgua(clientes[cedula]["promedio_consumo_agua"], clientes[cedula]["consumo_actual_agua"]);
-                Console.WriteLine($"Valor a pagar por agua: ${valorPagarAgua}");
+                int valorPagarAgua = ValorPagarAgua(clienteEncontrado.promedio_consumo_agua, clienteEncontrado.consumo_actual_agua);
+                Console.WriteLine($"Valor a pagar por servicios de energía: ${valorPagarAgua}");
             }
             else
             {
@@ -62,38 +67,40 @@ namespace AhorroConsumoEnergia
             }
         }
 
-        public static void CalcularPromedioConsumoEnergiaCliente(Dictionary<int, Dictionary<string, int>> clientes)
+        public static void CalcularPromedioConsumoEnergiaClientes(List<ListaUsuario> usuarios)
         {
-            double promedioConsumoEnergia = CalcularPromedioConsumoEnergia(clientes);
+            double promedioConsumoEnergia = PromedioConsumoEnergia(usuarios);
             Console.WriteLine($"Promedio del consumo actual de energía: {promedioConsumoEnergia}");
         }
 
-        private static double CalcularPromedioConsumoEnergia(Dictionary<int, Dictionary<string, int>> clientes)
+        private static double PromedioConsumoEnergia(List<ListaUsuario> usuarios)
         {
             int totalConsumoEnergia = 0;
-            int totalClientes = clientes.Count;
+            int totalClientes = usuarios.Count;
 
-            foreach (var cliente in clientes.Values)
+            foreach (var usuario in usuarios)
             {
-                totalConsumoEnergia += cliente["consumo_actual_energia"];
+                totalConsumoEnergia += usuario.consumo_actual_energia;
             }
 
             return (double)totalConsumoEnergia / totalClientes;
         }
 
-        public static void CalcularValorPagarFactura(Dictionary<int, Dictionary<string, int>> clientes)
+        public static void CalcularValorPagarFactura(List<ListaUsuario> usuario)
         {
             Console.Write("Ingrese el número de cédula del cliente: ");
             int cedula = Convert.ToInt32(Console.ReadLine());
 
-            if (clientes.ContainsKey(cedula))
+            ListaUsuario clienteEncontrado = usuario.Find(x => x.Cedula == cedula);
+
+            if (clienteEncontrado != null)
             {
-                int valorPagarEnergia = ValorPagarEnergia(clientes[cedula]["meta_ahorro_energia"], clientes[cedula]["consumo_actual_energia"]);
-                int valorPagarAgua = ValorPagarAgua(clientes[cedula]["promedio_consumo_agua"], clientes[cedula]["consumo_actual_agua"]);
+                int valorPagarEnergia = ValorPagarEnergia(clienteEncontrado.meta_ahorro_energia, clienteEncontrado.consumo_actual_energia);
+                int valorPagarAgua = ValorPagarAgua(clienteEncontrado.promedio_consumo_agua, clienteEncontrado.consumo_actual_agua);
 
                 int totalFacturaServicios = ValorPagarFactura(valorPagarEnergia, valorPagarAgua);
 
-                Console.WriteLine($"Total de la factura de servicios: ${totalFacturaServicios}");
+                Console.WriteLine($"Valor a pagar por servicios de energía: ${totalFacturaServicios}");
             }
             else
             {
@@ -106,44 +113,55 @@ namespace AhorroConsumoEnergia
             int totalFactura = valorPagarEnergia + valorPagarAgua;
 
             return totalFactura;
-        }      
-
-        public static int CalcularDescuentosEnergia(Dictionary<int, Dictionary<string, int>> clientes)
-        {
-            int totalDescuentos = 0;
-
-            foreach (var cliente in clientes.Values)
-            {
-                int metaAhorroEnergia = cliente["meta_ahorro_energia"];
-                int consumoActualEnergia = cliente["consumo_actual_energia"];
-
-                // Valor a pagar sin descuento
-                int valorParcial = consumoActualEnergia * 850;
-
-                // Valor a pagar con descuento
-                int valorIncentivo = (metaAhorroEnergia - consumoActualEnergia) * 850;
-                int valorPagarConDescuento = valorParcial - valorIncentivo;
-
-                int descuento = valorParcial - valorPagarConDescuento;
-
-                totalDescuentos += descuento;
-            }
-
-            return totalDescuentos;
         }
 
-        public static int CalcularExcesoAgua(Dictionary<int, Dictionary<string, int>> clientes)
+        public static int CalcularDescuentosEnergia(List<ListaUsuario> usuarios)
+        {
+            int totalDescuentosEnergia = 0;
+            bool hayDescuentos = false;
+
+            foreach (var usuario in usuarios)
+            {
+                int metaAhorroEnergia = usuario.meta_ahorro_energia;
+                int consumoActualEnergia = usuario.consumo_actual_energia;
+
+                if (consumoActualEnergia <= metaAhorroEnergia)
+                {
+                    // Valor a pagar sin descuento
+                    int costoKilovatio = 850;
+                    int valorParcial = consumoActualEnergia * costoKilovatio;
+
+                    // Valor a pagar con descuento
+                    int valorIncentivo = (metaAhorroEnergia - consumoActualEnergia) * costoKilovatio;
+                    int valorPagarConDescuento = valorParcial - valorIncentivo;
+
+                    int descuento = valorParcial - valorPagarConDescuento;
+
+                    totalDescuentosEnergia += descuento;
+                    hayDescuentos = true;
+                }
+            }
+
+            if (!hayDescuentos)
+            {
+                Console.WriteLine("No hay clientes con descuento.");
+            }
+
+            return totalDescuentosEnergia;
+        }
+
+        public static int CalcularExcesoAgua(List<ListaUsuario> usuarios)
         {
             int totalExcesoAgua = 0;
 
-            foreach (var cliente in clientes.Values)
+            foreach (var usuario in usuarios)
             {
-                int promedioConsumoAgua = cliente["promedio_consumo_agua"];
-                int consumoActualAgua = cliente["consumo_actual_agua"];
+                int promedioConsumoAgua = usuario.promedio_consumo_agua;
+                int consumoActualAgua = usuario.consumo_actual_agua;
 
                 if (consumoActualAgua > promedioConsumoAgua)
                 {
-                    // Cantidad de metros cúbicos consumidos por encima del promedio
+                // Cantidad de metros cúbicos consumidos por encima del promedio
                     int excesoAgua = consumoActualAgua - promedioConsumoAgua;
 
                     totalExcesoAgua += excesoAgua;
@@ -153,17 +171,17 @@ namespace AhorroConsumoEnergia
             return totalExcesoAgua;
         }
 
-        public static void CalcularPorcentajeExcesoAguaPorEstrato(Dictionary<int, Dictionary<string, int>> clientes)
+        public static void CalcularPorcentajeExcesoAguaPorEstrato(List<ListaUsuario> usuarios)
         {
             Dictionary<int, int> totalExcesoAguaPorEstrato = new Dictionary<int, int>();
 
             Dictionary<int, int> totalAguaPorEstrato = new Dictionary<int, int>();
 
-            foreach (var cliente in clientes.Values)
+            foreach (var usuario in usuarios)
             {
-                int estrato = cliente["estrato"];
-                int promedioConsumoAgua = cliente["promedio_consumo_agua"];
-                int consumoActualAgua = cliente["consumo_actual_agua"];
+                int estrato = usuario.estrato;
+                int promedioConsumoAgua = usuario.promedio_consumo_agua;
+                int consumoActualAgua = usuario.consumo_actual_agua;
 
                 // Verifica si el estrato ya está en los diccionarios, si no lo crea
                 if (!totalExcesoAguaPorEstrato.ContainsKey(estrato))
@@ -191,14 +209,14 @@ namespace AhorroConsumoEnergia
             }
         }
 
-        public static int CalcularConsumoMayorPromedio(Dictionary<int, Dictionary<string, int>> clientes)
+        public static int CalcularConsumoMayorPromedio(List<ListaUsuario> usuarios)
         {
             int contadorClientes = 0;
 
-            foreach (var cliente in clientes.Values)
+            foreach (var usuario in usuarios)
             {
-                int promedioConsumoAgua = cliente["promedio_consumo_agua"];
-                int consumoActualAgua = cliente["consumo_actual_agua"];
+                int promedioConsumoAgua = usuario.promedio_consumo_agua;
+                int consumoActualAgua = usuario.consumo_actual_agua;
 
                 if (consumoActualAgua > promedioConsumoAgua)
                 {
@@ -208,8 +226,5 @@ namespace AhorroConsumoEnergia
 
             return contadorClientes;
         }
-
-
-
     }
 }

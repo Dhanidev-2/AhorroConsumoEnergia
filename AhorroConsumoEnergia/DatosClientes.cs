@@ -6,16 +6,31 @@ using System.Threading.Tasks;
 
 namespace AhorroConsumoEnergia
 {
-    public static class DatosClientes
+    public class ListaUsuario
     {
-        public static Dictionary<int, Dictionary<string, int>> ObtenerClientes()
+        public int cedula, estrato, meta_ahorro_energia, consumo_actual_energia, promedio_consumo_agua, consumo_actual_agua;
+
+        public int Cedula
         {
-            return new Dictionary<int, Dictionary<string, int>>()
+            get
+            {
+                return cedula;
+            }
+
+            set
+            {
+                cedula = value;
+            }
+        }
+
+        public ListaUsuario(int cedula, int estrato, int meta_ahorro_energia, int consumo_actual_energia, int promedio_consumo_agua, int consumo_actual_agua)
         {
-            {3145, new Dictionary<string, int>() {{"estrato", 3}, {"meta_ahorro_energia", 150}, {"consumo_actual_energia", 180}, {"promedio_consumo_agua", 25}, {"consumo_actual_agua", 20}}},
-            {8947, new Dictionary<string, int>() {{"estrato", 3}, {"meta_ahorro_energia", 190}, {"consumo_actual_energia", 187}, {"promedio_consumo_agua", 25}, {"consumo_actual_agua", 30}}},
-            {9812, new Dictionary<string, int>() {{"estrato", 4}, {"meta_ahorro_energia", 260}, {"consumo_actual_energia", 320}, {"promedio_consumo_agua", 25}, {"consumo_actual_agua", 25}}}
-        };
+            this.cedula = cedula;
+            this.estrato = estrato;
+            this.meta_ahorro_energia = meta_ahorro_energia;
+            this.consumo_actual_energia = consumo_actual_energia;
+            this.promedio_consumo_agua = promedio_consumo_agua;
+            this.consumo_actual_agua = consumo_actual_agua;
         }
     }
 }
