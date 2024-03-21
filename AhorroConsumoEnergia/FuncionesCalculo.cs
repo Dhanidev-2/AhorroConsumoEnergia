@@ -14,7 +14,7 @@ namespace AhorroConsumoEnergia
             Console.Write("Ingrese el número de cédula del cliente: ");
             int cedula = Convert.ToInt32(Console.ReadLine());
 
-            ListaUsuario clienteEncontrado = usuario.Find(x => x.Cedula == cedula);
+            var clienteEncontrado = usuario.Find(x => x.Cedula == cedula);
 
             if (clienteEncontrado != null)
             {
@@ -27,7 +27,7 @@ namespace AhorroConsumoEnergia
             }
         }
 
-        private static int ValorPagarEnergia(int metaAhorroEnergia, int consumoActualEnergia)
+        public static int ValorPagarEnergia(int metaAhorroEnergia, int consumoActualEnergia)
         {
             int costoKilovatio = 850;
             int valorParcial = consumoActualEnergia * costoKilovatio;
@@ -40,7 +40,7 @@ namespace AhorroConsumoEnergia
             Console.Write("Ingrese el número de cédula del cliente: ");
             int cedula = Convert.ToInt32(Console.ReadLine());
 
-            ListaUsuario clienteEncontrado = usuario.Find(x => x.Cedula == cedula);
+            var clienteEncontrado = usuario.Find(x => x.Cedula == cedula);
 
             if (clienteEncontrado != null)
             {
@@ -53,7 +53,7 @@ namespace AhorroConsumoEnergia
             }
         }
 
-        private static int ValorPagarAgua(int promedioConsumoAgua, int consumoActualAgua)
+        public static int ValorPagarAgua(int promedioConsumoAgua, int consumoActualAgua)
         {
             int costoMetroCubicoAgua = 4600;
             if (consumoActualAgua <= promedioConsumoAgua)
@@ -73,7 +73,7 @@ namespace AhorroConsumoEnergia
             Console.WriteLine($"Promedio del consumo actual de energía: {promedioConsumoEnergia}");
         }
 
-        private static double PromedioConsumoEnergia(List<ListaUsuario> usuarios)
+        public static double PromedioConsumoEnergia(List<ListaUsuario> usuarios)
         {
             int totalConsumoEnergia = 0;
             int totalClientes = usuarios.Count;
@@ -91,7 +91,7 @@ namespace AhorroConsumoEnergia
             Console.Write("Ingrese el número de cédula del cliente: ");
             int cedula = Convert.ToInt32(Console.ReadLine());
 
-            ListaUsuario clienteEncontrado = usuario.Find(x => x.Cedula == cedula);
+            var clienteEncontrado = usuario.Find(x => x.Cedula == cedula);
 
             if (clienteEncontrado != null)
             {
@@ -108,7 +108,7 @@ namespace AhorroConsumoEnergia
             }
         }
 
-        private static int ValorPagarFactura(int valorPagarEnergia, int valorPagarAgua)
+        public static int ValorPagarFactura(int valorPagarEnergia, int valorPagarAgua)
         {
             int totalFactura = valorPagarEnergia + valorPagarAgua;
 
@@ -174,8 +174,7 @@ namespace AhorroConsumoEnergia
         public static void CalcularPorcentajeExcesoAguaPorEstrato(List<ListaUsuario> usuarios)
         {
             Dictionary<int, int> totalExcesoAguaPorEstrato = new Dictionary<int, int>();
-
-            Dictionary<int, int> totalAguaPorEstrato = new Dictionary<int, int>();
+            int totalExcesoAgua = 0;
 
             foreach (var usuario in usuarios)
             {
@@ -187,10 +186,7 @@ namespace AhorroConsumoEnergia
                 if (!totalExcesoAguaPorEstrato.ContainsKey(estrato))
                 {
                     totalExcesoAguaPorEstrato[estrato] = 0;
-                    totalAguaPorEstrato[estrato] = 0;
                 }
-
-                totalAguaPorEstrato[estrato] += consumoActualAgua;
 
                 if (consumoActualAgua > promedioConsumoAgua)
                 {
@@ -198,16 +194,18 @@ namespace AhorroConsumoEnergia
                     int excesoAgua = consumoActualAgua - promedioConsumoAgua;
 
                     totalExcesoAguaPorEstrato[estrato] += excesoAgua;
+                    totalExcesoAgua += excesoAgua;
                 }
             }
 
             Console.WriteLine("Porcentaje de consumo excesivo de agua por estrato:");
             foreach (var estrato in totalExcesoAguaPorEstrato.Keys)
             {
-                double porcentaje = (double)totalExcesoAguaPorEstrato[estrato] / totalAguaPorEstrato[estrato] * 100;
+                double porcentaje = (double)totalExcesoAguaPorEstrato[estrato] / totalExcesoAgua * 100;
                 Console.WriteLine($"Estrato {estrato}: {porcentaje}%");
             }
         }
+
 
         public static int CalcularConsumoMayorPromedio(List<ListaUsuario> usuarios)
         {

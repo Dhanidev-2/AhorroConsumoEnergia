@@ -12,10 +12,15 @@ class Program
         while (opcionPrincipal != 4)
         {
             Console.WriteLine("MENÚ PRINCIPAL");
+            Console.WriteLine("");
             Console.WriteLine("Seleccione una opción:");
+            Console.WriteLine("");
             Console.WriteLine("1. Ingresar usuario");
+            Console.WriteLine("");
             Console.WriteLine("2. Modificar usuario");
+            Console.WriteLine("");
             Console.WriteLine("3. Cálcular datos de consumo");
+            Console.WriteLine("");
             Console.WriteLine("4. Salir");
             opcionPrincipal = Convert.ToInt32(Console.ReadLine());
 
@@ -43,7 +48,7 @@ class Program
     static void MenuOpcion1()
     {
 
-        Console.WriteLine("Ingrese los datos de los servicios de su hogar");
+        Console.WriteLine("Ingrese sus datos personajes");
 
         while (true)
         {
@@ -59,6 +64,50 @@ class Program
                 Console.Write("Cédula: ");
                 input = Console.ReadLine();
             }
+
+            Console.Write("Ingrese el nombre de usuario:");
+            string nombre = Console.ReadLine();
+            while (string.IsNullOrEmpty(nombre) || double.TryParse(nombre, out _))
+            {
+                if (double.TryParse(nombre, out _))
+                {
+                    Console.WriteLine("Por favor, ingrese un nombre válido. No se permiten números.");
+                }
+                else
+                {
+                    Console.WriteLine("Por favor, ingrese un nombre válido.");
+                }
+                Console.Write("Ingrese el nombre de usuario:");
+                nombre = Console.ReadLine();
+            }
+
+
+            Console.Write("Ingrese el apellido de usuario:");
+            string apellido = Console.ReadLine();
+            while (string.IsNullOrEmpty(apellido) || double.TryParse(apellido, out _))
+            {
+                //Si el nombre puede ser convertido a un número 
+                if (double.TryParse(apellido, out _))
+                {
+                    Console.WriteLine("Por favor, ingrese un apellido válido. No se permiten números.");
+                }
+                else
+                {
+                    Console.WriteLine("Por favor, ingrese un apellido válido.");
+                }
+                Console.Write("Ingrese el nombre de usuario:");
+                nombre = Console.ReadLine();
+            }
+
+            
+            Console.Write("Ingresar su periodo de consumo: ");
+            int periodo_consumo;
+            while (!int.TryParse(Console.ReadLine(), out periodo_consumo))
+            {
+                Console.WriteLine("Ingrese un periodo de consumo  válido.");
+                Console.Write("Periodo de consumo: ");
+            }
+
 
             Console.Write("Ingresar número de Estrato: ");
             int estrato;
@@ -101,14 +150,17 @@ class Program
             }
 
             // Agregar el nuevo usuario a la lista
-            usuarios.Add(new ListaUsuario(cedula, estrato, meta_ahorro_energia, consumo_actual_energia, promedio_consumo_agua, consumo_actual_agua));
+            usuarios.Add(new ListaUsuario(cedula, nombre, apellido, periodo_consumo, estrato, meta_ahorro_energia, consumo_actual_energia, promedio_consumo_agua, consumo_actual_agua));
+            Console.WriteLine("");
         }
 
         // Mostrar las cedulas ingresadas
         Console.WriteLine("\nUsuarios ingresados:");
+        Console.WriteLine("");
         foreach (var usuario in usuarios)
         {
-            Console.WriteLine($"Cedula: {usuario.Cedula}, Estrato: {usuario.estrato}, Meta Ahorro Energia: {usuario.meta_ahorro_energia}, Consumo Actual Energia: {usuario.consumo_actual_energia}, Promedio Consumo Agua: {usuario.promedio_consumo_agua}");
+            Console.WriteLine($"Cedula: {usuario.Cedula}, Nombre: {usuario.nombre}, Apellido:{usuario.apellido}, Periodo de Consumo: {usuario.periodo_consumo}, Estrato: {usuario.estrato}, Meta Ahorro Energia: {usuario.meta_ahorro_energia}, Consumo Actual Energia: {usuario.consumo_actual_energia}, Promedio Consumo Agua: {usuario.promedio_consumo_agua}, Consumo Actual Agua: {usuario.consumo_actual_agua}");
+            Console.WriteLine("");
         }
     }
 
@@ -211,5 +263,4 @@ class Program
 
     }
 
-}  
-
+}
