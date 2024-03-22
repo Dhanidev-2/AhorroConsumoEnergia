@@ -25,7 +25,6 @@ namespace AhorroConsumoEnergia_Test
             int promedioConsumoAgua = 25;
             int consumoActualAgua = 20;
 
-
             var result = FuncionesCalculo.ValorPagarAgua(promedioConsumoAgua, consumoActualAgua);
 
             int valor_esperado = 92000;
@@ -133,7 +132,7 @@ namespace AhorroConsumoEnergia_Test
             usuarios.Add(new ListaUsuario(8947, "Usuario2", "Apellido2", 2, 3, 190, 187, 25, 30));
             usuarios.Add(new ListaUsuario(9812, "Usuario3", "Apellido3", 3, 4, 260, 320, 25, 25));
 
-            int contadorClientesEsperado = 1; // Solo el Usuario2 tiene un consumo actual de agua mayor que el promedio
+            int contadorClientesEsperado = 1; 
 
             int contadorClientesActual = FuncionesCalculo.CalcularConsumoMayorPromedio(usuarios);
 

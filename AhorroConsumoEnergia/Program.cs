@@ -170,8 +170,11 @@ class Program
         while (!salir)
         {
             Console.WriteLine("Seleccione una opción que desea realizar: ");
+            Console.WriteLine("");
             Console.WriteLine("1. Actualizar información del usuario");
+            Console.WriteLine("");
             Console.WriteLine("2. Eliminar usuario");
+            Console.WriteLine("");
             Console.WriteLine("3. Volver al menu principal");
 
             if (int.TryParse(Console.ReadLine(), out int opcion))
@@ -206,18 +209,31 @@ class Program
         {
             Console.WriteLine("Bienvenido al sistema Incentivo al ahorro en el consumo de energía");
             Console.WriteLine("Seleccione una opción:");
+            Console.WriteLine("");
             Console.WriteLine("1. Calcular valor a pagar por energía");
+            Console.WriteLine("");
             Console.WriteLine("2. Calcular valor a pagar por agua");
+            Console.WriteLine("");
             Console.WriteLine("3. Calcular factura de los servicios");
+            Console.WriteLine("");
             Console.WriteLine("4. Calcular promedio del consumo actual de energía");
+            Console.WriteLine("");
             Console.WriteLine("5. Calcular valor total del descuento de los clientes");
+            Console.WriteLine("");
             Console.WriteLine("6. Calcular exceso del agua por encima del promedio");
+            Console.WriteLine("");
             Console.WriteLine("7. Calcular exceso de agua por estrato");
+            Console.WriteLine("");
             Console.WriteLine("8. Calcular consumo de agua mayor al promedio");
+            Console.WriteLine("");
             Console.WriteLine("9. Calcular cliente con mayor desfase en el consumo de energía");
+            Console.WriteLine("");
             Console.WriteLine("10. Calcular estrato con mayor ahorro de la cantidad de agua");
+            Console.WriteLine("");
             Console.WriteLine("11. Calcular estrato con el mayor y menor consumo de energía");
+            Console.WriteLine("");
             Console.WriteLine("12. Calcular valor total del pago por energía y agua");
+            Console.WriteLine("");
             Console.WriteLine("13. Volver al menu principal");
 
             if (int.TryParse(Console.ReadLine(), out int opcion))

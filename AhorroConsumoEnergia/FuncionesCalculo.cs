@@ -215,7 +215,6 @@ namespace AhorroConsumoEnergia
                 }
             }
 
-            // Calcula el porcentaje de exceso de agua por estrato
             Dictionary<int, double> porcentajeExcesoAguaPorEstrato = new Dictionary<int, double>();
             foreach (var estrato in totalExcesoAguaPorEstrato.Keys)
             {
@@ -302,7 +301,6 @@ namespace AhorroConsumoEnergia
                 int promedioConsumoAgua = usuario.promedio_consumo_agua;
                 int consumoActualAgua = usuario.consumo_actual_agua;
 
-                // Verifica si el estrato ya está en los diccionarios, si no lo crea
                 if (!totalAhorroAguaPorEstrato.ContainsKey(estrato))
                 {
                     totalAhorroAguaPorEstrato[estrato] = 0;
@@ -310,7 +308,6 @@ namespace AhorroConsumoEnergia
 
                 if (consumoActualAgua < promedioConsumoAgua)
                 {
-                    // Cantidad de agua ahorrada con respecto al promedio
                     int ahorroAgua = promedioConsumoAgua - consumoActualAgua;
 
                     totalAhorroAguaPorEstrato[estrato] += ahorroAgua;
