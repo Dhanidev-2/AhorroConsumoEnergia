@@ -19,7 +19,7 @@ class Program
             Console.WriteLine("");
             Console.WriteLine("2. Modificar usuario");
             Console.WriteLine("");
-            Console.WriteLine("3. Cálcular datos de consumo");
+            Console.WriteLine("3. Calcular datos de consumo");
             Console.WriteLine("");
             Console.WriteLine("4. Salir");
             opcionPrincipal = Convert.ToInt32(Console.ReadLine());
@@ -214,7 +214,11 @@ class Program
             Console.WriteLine("6. Calcular exceso del agua por encima del promedio");
             Console.WriteLine("7. Calcular exceso de agua por estrato");
             Console.WriteLine("8. Calcular consumo de agua mayor al promedio");
-            Console.WriteLine("9. Volver al menu principal");
+            Console.WriteLine("9. Calcular cliente con mayor desfase en el consumo de energía");
+            Console.WriteLine("10. Calcular estrato con mayor ahorro de la cantidad de agua");
+            Console.WriteLine("11. Calcular estrato con el mayor y menor consumo de energía");
+            Console.WriteLine("12. Calcular valor total del pago por energía y agua");
+            Console.WriteLine("13. Volver al menu principal");
 
             if (int.TryParse(Console.ReadLine(), out int opcion))
             {
@@ -248,6 +252,18 @@ class Program
                         Console.WriteLine($"Cantidad de clientes con consumo de agua mayor al promedio: {consumoMayorPromedio}");
                         break;
                     case 9:
+                        FuncionesCalculo.CalcularMayorDesfase(usuarios);
+                        break;
+                    case 10:
+                        FuncionesCalculo.CalcularEstratoAhorroMayorCantidadAgua(usuarios);
+                        break;
+                    case 11:
+                        FuncionesCalculo.CalcularEstratoMayorMenorConsumoEnergia(usuarios);
+                        break;
+                    case 12:
+                        FuncionesCalculo.CalcularValorTotalPago(usuarios);
+                        break;
+                    case 13:
                         salir = true;
                         break;
                     default:

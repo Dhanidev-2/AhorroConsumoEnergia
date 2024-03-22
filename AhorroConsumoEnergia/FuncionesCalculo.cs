@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,6 @@ namespace AhorroConsumoEnergia
 {
     public class FuncionesCalculo
     {
-
         public static void CalcularValorPagarEnergia(List<ListaUsuario> usuario)
         {
             Console.Write("Ingrese el número de cédula del cliente: ");
@@ -34,6 +34,7 @@ namespace AhorroConsumoEnergia
             int valorIncentivo = (metaAhorroEnergia - consumoActualEnergia) * costoKilovatio;
             return valorParcial - valorIncentivo;
         }
+
 
         public static void CalcularValorPagarAgua(List<ListaUsuario> usuario)
         {
@@ -67,6 +68,7 @@ namespace AhorroConsumoEnergia
             }
         }
 
+
         public static void CalcularPromedioConsumoEnergiaClientes(List<ListaUsuario> usuarios)
         {
             double promedioConsumoEnergia = PromedioConsumoEnergia(usuarios);
@@ -85,6 +87,7 @@ namespace AhorroConsumoEnergia
 
             return (double)totalConsumoEnergia / totalClientes;
         }
+
 
         public static void CalcularValorPagarFactura(List<ListaUsuario> usuario)
         {
@@ -114,6 +117,7 @@ namespace AhorroConsumoEnergia
 
             return totalFactura;
         }
+
 
         public static int CalcularDescuentosEnergia(List<ListaUsuario> usuarios)
         {
@@ -150,6 +154,7 @@ namespace AhorroConsumoEnergia
             return totalDescuentosEnergia;
         }
 
+
         public static int CalcularExcesoAgua(List<ListaUsuario> usuarios)
         {
             int totalExcesoAgua = 0;
@@ -171,7 +176,19 @@ namespace AhorroConsumoEnergia
             return totalExcesoAgua;
         }
 
+
         public static void CalcularPorcentajeExcesoAguaPorEstrato(List<ListaUsuario> usuarios)
+        {
+            Dictionary<int, double> porcentajeExcesoAguaPorEstrato = PorcentajeExcesoAguaPorEstrato(usuarios);
+
+            Console.WriteLine("Porcentaje de consumo excesivo de agua por estrato:");
+            foreach (var estrato in porcentajeExcesoAguaPorEstrato.Keys)
+            {
+                Console.WriteLine($"Estrato {estrato}: {porcentajeExcesoAguaPorEstrato[estrato]}%");
+            }
+        }
+
+        public static Dictionary<int, double> PorcentajeExcesoAguaPorEstrato(List<ListaUsuario> usuarios)
         {
             Dictionary<int, int> totalExcesoAguaPorEstrato = new Dictionary<int, int>();
             int totalExcesoAgua = 0;
@@ -198,12 +215,15 @@ namespace AhorroConsumoEnergia
                 }
             }
 
-            Console.WriteLine("Porcentaje de consumo excesivo de agua por estrato:");
+            // Calcula el porcentaje de exceso de agua por estrato
+            Dictionary<int, double> porcentajeExcesoAguaPorEstrato = new Dictionary<int, double>();
             foreach (var estrato in totalExcesoAguaPorEstrato.Keys)
             {
                 double porcentaje = (double)totalExcesoAguaPorEstrato[estrato] / totalExcesoAgua * 100;
-                Console.WriteLine($"Estrato {estrato}: {porcentaje}%");
+                porcentajeExcesoAguaPorEstrato[estrato] = porcentaje;
             }
+
+            return porcentajeExcesoAguaPorEstrato;
         }
 
 
@@ -223,6 +243,177 @@ namespace AhorroConsumoEnergia
             }
 
             return contadorClientes;
+        }
+
+
+        public static void CalcularMayorDesfase(List<ListaUsuario> usuarios)
+        {
+            ListaUsuario usuarioMayorDesfase = MayorDesfase(usuarios);
+
+            if (usuarioMayorDesfase != null)
+            {
+                int desfase = usuarioMayorDesfase.consumo_actual_energia - usuarioMayorDesfase.meta_ahorro_energia;
+                Console.WriteLine($"El usuario con mayor desfase es {usuarioMayorDesfase.nombre} con un desfase de {desfase}.");
+            }
+            else
+            {
+                Console.WriteLine("No hay usuarios con desfase en el consumo de energía.");
+            }
+        }
+
+        public static ListaUsuario MayorDesfase(List<ListaUsuario> usuarios)
+        {
+            ListaUsuario usuarioMayorDesfase = null;
+            int mayorDesfase = 0;
+
+            foreach (var usuario in usuarios)
+            {
+                int metaAhorroEnergia = usuario.meta_ahorro_energia;
+                int consumoActualEnergia = usuario.consumo_actual_energia;
+
+                if (consumoActualEnergia > metaAhorroEnergia)
+                {
+                    int desfase = consumoActualEnergia - metaAhorroEnergia;
+                    if (desfase > mayorDesfase)
+                    {
+                        mayorDesfase = desfase;
+                        usuarioMayorDesfase = usuario;
+                    }
+                }
+            }
+
+            return usuarioMayorDesfase;
+        }
+
+
+        public static void CalcularEstratoAhorroMayorCantidadAgua(List<ListaUsuario> usuarios)
+        {
+            int estratoMayorAhorro = EstratoAhorroMayorCantidadAgua(usuarios);
+            Console.WriteLine($"El estrato con mayor cantidad de agua ahorrada es el estrato {estratoMayorAhorro}.");
+        }
+
+        public static int EstratoAhorroMayorCantidadAgua(List<ListaUsuario> usuarios)
+        {
+            Dictionary<int, int> totalAhorroAguaPorEstrato = new Dictionary<int, int>();
+
+            foreach (var usuario in usuarios)
+            {
+                int estrato = usuario.estrato;
+                int promedioConsumoAgua = usuario.promedio_consumo_agua;
+                int consumoActualAgua = usuario.consumo_actual_agua;
+
+                // Verifica si el estrato ya está en los diccionarios, si no lo crea
+                if (!totalAhorroAguaPorEstrato.ContainsKey(estrato))
+                {
+                    totalAhorroAguaPorEstrato[estrato] = 0;
+                }
+
+                if (consumoActualAgua < promedioConsumoAgua)
+                {
+                    // Cantidad de agua ahorrada con respecto al promedio
+                    int ahorroAgua = promedioConsumoAgua - consumoActualAgua;
+
+                    totalAhorroAguaPorEstrato[estrato] += ahorroAgua;
+                }
+            }
+
+            // Encuentra el estrato con el mayor ahorro de agua
+            var maxAhorro = totalAhorroAguaPorEstrato.Values.Max();
+            var estratoMayorAhorro = totalAhorroAguaPorEstrato.First(x => x.Value == maxAhorro).Key;
+
+            return estratoMayorAhorro;
+        }
+
+
+        public static void CalcularEstratoMayorMenorConsumoEnergia(List<ListaUsuario> usuarios)
+        {
+            int estratoMayorConsumo = EstratoMayorConsumoEnergia(usuarios);
+            int estratoMenorConsumo = EstratoMenorConsumoEnergia(usuarios);
+            Console.WriteLine($"El estrato con mayor consumo de energía es el estrato {estratoMayorConsumo}.");
+            Console.WriteLine($"El estrato con menor consumo de energía es el estrato {estratoMenorConsumo}.");
+        }
+
+        public static int EstratoMayorConsumoEnergia(List<ListaUsuario> usuarios)
+        {
+            Dictionary<int, int> totalConsumoEnergiaPorEstrato = new Dictionary<int, int>();
+
+            foreach (var usuario in usuarios)
+            {
+                int estrato = usuario.estrato;
+                int consumoActualEnergia = usuario.consumo_actual_energia;
+
+                if (!totalConsumoEnergiaPorEstrato.ContainsKey(estrato))
+                {
+                    totalConsumoEnergiaPorEstrato[estrato] = 0;
+                }
+
+                totalConsumoEnergiaPorEstrato[estrato] += consumoActualEnergia;
+            }
+
+            // Encuentra el estrato con el mayor consumo de energía
+            var maxConsumo = totalConsumoEnergiaPorEstrato.Values.Max();
+            var estratoMayorConsumo = totalConsumoEnergiaPorEstrato.First(x => x.Value == maxConsumo).Key;
+
+            return estratoMayorConsumo;
+        }
+
+        public static int EstratoMenorConsumoEnergia(List<ListaUsuario> usuarios)
+        {
+            Dictionary<int, int> totalConsumoEnergiaPorEstrato = new Dictionary<int, int>();
+
+            foreach (var usuario in usuarios)
+            {
+                int estrato = usuario.estrato;
+                int consumoActualEnergia = usuario.consumo_actual_energia;
+
+                if (!totalConsumoEnergiaPorEstrato.ContainsKey(estrato))
+                {
+                    totalConsumoEnergiaPorEstrato[estrato] = 0;
+                }
+
+                totalConsumoEnergiaPorEstrato[estrato] += consumoActualEnergia;
+            }
+
+            // Encuentra el estrato con el menor consumo de energía
+            var minConsumo = totalConsumoEnergiaPorEstrato.Values.Min();
+            var estratoMenorConsumo = totalConsumoEnergiaPorEstrato.First(x => x.Value == minConsumo).Key;
+
+            return estratoMenorConsumo;
+        }
+
+
+        public static void CalcularValorTotalPago(List<ListaUsuario> usuarios)
+        {
+            int totalFacturaEnergia = TotalFacturasEnergia(usuarios);
+            int totalFacturaAgua = TotalFacturasAgua(usuarios);
+            Console.WriteLine($"El total pagado por los clientes por concepto de energía es: ${totalFacturaEnergia}");
+            Console.WriteLine($"El total pagado por los clientes por concepto de agua es: ${totalFacturaAgua}");
+        }
+
+        public static int TotalFacturasEnergia(List<ListaUsuario> usuarios)
+        {
+            int totalFacturaEnergia = 0;
+
+            foreach (var usuario in usuarios)
+            {
+                int valorPagarEnergia = ValorPagarEnergia(usuario.meta_ahorro_energia, usuario.consumo_actual_energia);
+                totalFacturaEnergia += valorPagarEnergia;
+            }
+
+            return totalFacturaEnergia;
+        }
+
+        public static int TotalFacturasAgua(List<ListaUsuario> usuarios)
+        {
+            int totalFacturaAgua = 0;
+
+            foreach (var usuario in usuarios)
+            {
+                int valorPagarAgua = ValorPagarAgua(usuario.promedio_consumo_agua, usuario.consumo_actual_agua);
+                totalFacturaAgua += valorPagarAgua;
+            }
+
+            return totalFacturaAgua;
         }
     }
 }

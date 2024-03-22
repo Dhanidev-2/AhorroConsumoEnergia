@@ -18,7 +18,6 @@ namespace AhorroConsumoEnergia_Test
             Assert.AreEqual(valor_esperado, result);
         }
 
-
         [TestMethod]
         public void TestValorPagarAgua()
         {
@@ -33,7 +32,6 @@ namespace AhorroConsumoEnergia_Test
 
             Assert.AreEqual(valor_esperado, result);
         }
-
 
         [TestMethod]
         public void TestPromedioConsumoEnergia()
@@ -77,10 +75,8 @@ namespace AhorroConsumoEnergia_Test
 
             int totalDescuentosEnergiaEsperado = descuentoUsuario1 + descuentoUsuario2 + descuentoUsuario3;
 
-            // Act
             int totalDescuentosEnergiaActual = FuncionesCalculo.CalcularDescuentosEnergia(usuarios);
 
-            // Assert
             Assert.AreEqual(totalDescuentosEnergiaEsperado, totalDescuentosEnergiaActual, "El total de descuentos de energía calculado no es el esperado.");
         }
 
@@ -92,9 +88,9 @@ namespace AhorroConsumoEnergia_Test
             usuarios.Add(new ListaUsuario(8947, "Usuario2", "Apellido2", 2, 3, 190, 187, 25, 30));
             usuarios.Add(new ListaUsuario(9812, "Usuario3", "Apellido3", 3, 4, 260, 320, 25, 25));
 
-            int excesoAguaUsuario1 = usuarios[0].consumo_actual_agua - usuarios[0].promedio_consumo_agua; // Cálculo del exceso de agua para el primer usuario
-            int excesoAguaUsuario2 = usuarios[1].consumo_actual_agua - usuarios[1].promedio_consumo_agua; // Cálculo del exceso de agua para el segundo usuario
-            int excesoAguaUsuario3 = usuarios[2].consumo_actual_agua - usuarios[2].promedio_consumo_agua; // Cálculo del exceso de agua para el tercer usuario
+            int excesoAguaUsuario1 = usuarios[0].consumo_actual_agua - usuarios[0].promedio_consumo_agua; 
+            int excesoAguaUsuario2 = usuarios[1].consumo_actual_agua - usuarios[1].promedio_consumo_agua; 
+            int excesoAguaUsuario3 = usuarios[2].consumo_actual_agua - usuarios[2].promedio_consumo_agua; 
 
             // Verificación de que el exceso de agua sea positivo, si no, se establece en 0
             if (excesoAguaUsuario1 < 0)
@@ -104,16 +100,13 @@ namespace AhorroConsumoEnergia_Test
             if (excesoAguaUsuario3 < 0)
                 excesoAguaUsuario3 = 0;
 
-            int totalExcesoAguaEsperado = excesoAguaUsuario1 + excesoAguaUsuario2 + excesoAguaUsuario3; // Cálculo del total de exceso de agua esperado
+            int totalExcesoAguaEsperado = excesoAguaUsuario1 + excesoAguaUsuario2 + excesoAguaUsuario3;
 
-            // Act
-            int totalExcesoAguaActual = FuncionesCalculo.CalcularExcesoAgua(usuarios); // Llamada al método a probar
+            int totalExcesoAguaActual = FuncionesCalculo.CalcularExcesoAgua(usuarios); 
 
-            // Assert
             Assert.AreEqual(totalExcesoAguaEsperado, totalExcesoAguaActual);
         }
 
-        /* Falta este test
         [TestMethod]
         public void TestCalcularPorcentajeExcesoAguaPorEstrato()
         {
@@ -121,7 +114,16 @@ namespace AhorroConsumoEnergia_Test
             usuarios.Add(new ListaUsuario(3145, "Usuario1", "Apellido1", 1, 3, 150, 180, 25, 20));
             usuarios.Add(new ListaUsuario(8947, "Usuario2", "Apellido2", 2, 3, 190, 187, 25, 30));
             usuarios.Add(new ListaUsuario(9812, "Usuario3", "Apellido3", 3, 4, 260, 320, 25, 25));
-        }*/
+
+            Dictionary<int, double> porcentajeExcesoAguaPorEstrato = FuncionesCalculo.PorcentajeExcesoAguaPorEstrato(usuarios);
+
+            // Assert
+            Assert.AreEqual(2, porcentajeExcesoAguaPorEstrato.Count);
+            Assert.IsTrue(porcentajeExcesoAguaPorEstrato.ContainsKey(3));
+            Assert.IsTrue(porcentajeExcesoAguaPorEstrato.ContainsKey(4));
+            Assert.AreEqual(100.0, porcentajeExcesoAguaPorEstrato[3], 0.01);
+            Assert.AreEqual(0.0, porcentajeExcesoAguaPorEstrato[4], 0.01);
+        }
 
         [TestMethod]
         public void TestCalcularConsumoMayorPromedio()
@@ -135,7 +137,96 @@ namespace AhorroConsumoEnergia_Test
 
             int contadorClientesActual = FuncionesCalculo.CalcularConsumoMayorPromedio(usuarios);
 
-            Assert.AreEqual(contadorClientesEsperado, contadorClientesActual, "El número de clientes con un consumo de agua mayor que el promedio no es el esperado.");
+            Assert.AreEqual(contadorClientesEsperado, contadorClientesActual);
+        }
+
+        [TestMethod]
+        public void TestCalcularMayorDesfase()
+        {
+            List<ListaUsuario> usuarios = new List<ListaUsuario>();
+            usuarios.Add(new ListaUsuario(3145, "Usuario1", "Apellido1", 1, 3, 150, 180, 25, 20));
+            usuarios.Add(new ListaUsuario(8947, "Usuario2", "Apellido2", 2, 3, 190, 187, 25, 30));
+            usuarios.Add(new ListaUsuario(9812, "Usuario3", "Apellido3", 3, 4, 260, 320, 25, 25));
+
+            ListaUsuario usuarioMayorDesfase = FuncionesCalculo.MayorDesfase(usuarios);
+
+            Assert.IsNotNull(usuarioMayorDesfase);
+            Assert.AreEqual("Usuario3", usuarioMayorDesfase.nombre);
+        }
+
+        [TestMethod]
+        public void TestCalcularEstratoAhorroMayorCantidadAgua()
+        {
+            List<ListaUsuario> usuarios = new List<ListaUsuario>();
+            usuarios.Add(new ListaUsuario(3145, "Usuario1", "Apellido1", 1, 3, 150, 180, 25, 20));
+            usuarios.Add(new ListaUsuario(8947, "Usuario2", "Apellido2", 2, 3, 190, 187, 25, 30));
+            usuarios.Add(new ListaUsuario(9812, "Usuario3", "Apellido3", 3, 4, 260, 320, 25, 25));
+
+            int estratoMayorAhorro = FuncionesCalculo.EstratoAhorroMayorCantidadAgua(usuarios);
+
+            int estratoEsperado = 3;
+
+            Assert.AreEqual(estratoEsperado, estratoMayorAhorro);
+        }
+
+        [TestMethod]
+        public void TestEstratoMayorConsumoEnergia()
+        {
+            List<ListaUsuario> usuarios = new List<ListaUsuario>();
+            usuarios.Add(new ListaUsuario(3145, "Usuario1", "Apellido1", 1, 3, 150, 180, 25, 20));
+            usuarios.Add(new ListaUsuario(8947, "Usuario2", "Apellido2", 2, 3, 190, 187, 25, 30));
+            usuarios.Add(new ListaUsuario(9812, "Usuario3", "Apellido3", 3, 4, 260, 320, 25, 25));
+
+            int estratoMayorConsumo = FuncionesCalculo.EstratoMayorConsumoEnergia(usuarios);
+
+            int estratoEsperado = 3;
+
+            Assert.AreEqual(estratoEsperado, estratoMayorConsumo);
+        }
+
+        [TestMethod]
+        public void TestEstratoMenorConsumoEnergia()
+        {
+            List<ListaUsuario> usuarios = new List<ListaUsuario>();
+            usuarios.Add(new ListaUsuario(3145, "Usuario1", "Apellido1", 1, 3, 150, 180, 25, 20));
+            usuarios.Add(new ListaUsuario(8947, "Usuario2", "Apellido2", 2, 3, 190, 187, 25, 30));
+            usuarios.Add(new ListaUsuario(9812, "Usuario3", "Apellido3", 3, 4, 260, 320, 25, 25));
+
+            int estratoMenorConsumo = FuncionesCalculo.EstratoMenorConsumoEnergia(usuarios);
+
+            int estratoEsperado = 4;
+
+            Assert.AreEqual(estratoEsperado, estratoMenorConsumo);
+        }
+
+        [TestMethod]
+        public void TestTotalFacturasEnergia()
+        {
+            List<ListaUsuario> usuarios = new List<ListaUsuario>();
+            usuarios.Add(new ListaUsuario(3145, "Usuario1", "Apellido1", 1, 3, 150, 180, 25, 20));
+            usuarios.Add(new ListaUsuario(8947, "Usuario2", "Apellido2", 2, 3, 190, 187, 25, 30));
+            usuarios.Add(new ListaUsuario(9812, "Usuario3", "Apellido3", 3, 4, 260, 320, 25, 25));
+
+            int totalFacturaEnergia = FuncionesCalculo.TotalFacturasEnergia(usuarios);
+
+            int totalEsperado = FuncionesCalculo.ValorPagarEnergia(150, 180) + FuncionesCalculo.ValorPagarEnergia(190, 187) + FuncionesCalculo.ValorPagarEnergia(260, 320);
+
+            Assert.AreEqual(totalEsperado, totalFacturaEnergia);
+        }
+
+        [TestMethod]
+        public void TestTotalFacturasAgua()
+        {
+            List<ListaUsuario> usuarios = new List<ListaUsuario>();
+            usuarios.Add(new ListaUsuario(3145, "Usuario1", "Apellido1", 1, 3, 150, 180, 25, 20));
+            usuarios.Add(new ListaUsuario(8947, "Usuario2", "Apellido2", 2, 3, 190, 187, 25, 30));
+            usuarios.Add(new ListaUsuario(9812, "Usuario3", "Apellido3", 3, 4, 260, 320, 25, 25));
+
+            int totalFacturaAgua = FuncionesCalculo.TotalFacturasAgua(usuarios);
+
+            int totalEsperado = FuncionesCalculo.ValorPagarAgua(25, 20) + FuncionesCalculo.ValorPagarAgua(25, 30) + FuncionesCalculo.ValorPagarAgua(25, 25);
+
+            Assert.AreEqual(totalEsperado, totalFacturaAgua);
         }
 
     }
