@@ -118,7 +118,7 @@ namespace AhorroConsumoEnergia_Test
 
             // Assert
             Assert.AreEqual(2, porcentajeExcesoAguaPorEstrato.Count);
-            Assert.IsTrue(porcentajeExcesoAguaPorEstrato.ContainsKey(3));
+            Assert.IsTrue(porcentajeExcesoAguaPorEstrato.ContainsKey(3)); //verifica si el diccionario contiene clave para ese estrato
             Assert.IsTrue(porcentajeExcesoAguaPorEstrato.ContainsKey(4));
             Assert.AreEqual(100.0, porcentajeExcesoAguaPorEstrato[3], 0.01);
             Assert.AreEqual(0.0, porcentajeExcesoAguaPorEstrato[4], 0.01);
@@ -226,6 +226,22 @@ namespace AhorroConsumoEnergia_Test
             int totalEsperado = FuncionesCalculo.ValorPagarAgua(25, 20) + FuncionesCalculo.ValorPagarAgua(25, 30) + FuncionesCalculo.ValorPagarAgua(25, 25);
 
             Assert.AreEqual(totalEsperado, totalFacturaAgua);
+        }
+
+        [TestMethod]
+        public void TestMayorPeriodoConsumoAgua()
+        {
+            List<ListaUsuario> usuarios = new List<ListaUsuario>();
+            usuarios.Add(new ListaUsuario(3145, "Usuario1", "Apellido1", 1, 3, 150, 180, 25, 20));
+            usuarios.Add(new ListaUsuario(8947, "Usuario2", "Apellido2", 2, 3, 190, 187, 25, 30));
+            usuarios.Add(new ListaUsuario(9812, "Usuario3", "Apellido3", 3, 4, 260, 320, 25, 25));
+
+            ListaUsuario resultado = FuncionesCalculo.MayorPeriodoConsumoAgua(usuarios, 3);
+
+            Assert.IsNotNull(resultado);
+            Assert.AreEqual(9812, resultado.cedula);
+            Assert.AreEqual("Usuario3", resultado.nombre);
+            Assert.AreEqual("Apellido3", resultado.apellido);
         }
 
     }

@@ -234,7 +234,9 @@ class Program
             Console.WriteLine("");
             Console.WriteLine("12. Calcular valor total del pago por energía y agua");
             Console.WriteLine("");
-            Console.WriteLine("13. Volver al menu principal");
+            Console.WriteLine("13. Calcular mayor consumo agua por periodo de consumo");
+            Console.WriteLine("");
+            Console.WriteLine("14. Volver al menu principal");
 
             if (int.TryParse(Console.ReadLine(), out int opcion))
             {
@@ -280,6 +282,11 @@ class Program
                         FuncionesCalculo.CalcularValorTotalPago(usuarios);
                         break;
                     case 13:
+                        Console.Write("Ingrese el periodo de consumo: ");
+                        int periodoConsumo = Convert.ToInt32(Console.ReadLine());
+                        FuncionesCalculo.CalcularMayorPeriodoConsumoAgua(usuarios, periodoConsumo);
+                        break;
+                    case 14:
                         salir = true;
                         break;
                     default:

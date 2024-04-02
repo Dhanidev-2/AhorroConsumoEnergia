@@ -412,5 +412,42 @@ namespace AhorroConsumoEnergia
 
             return totalFacturaAgua;
         }
+
+        public static void CalcularMayorPeriodoConsumoAgua(List<ListaUsuario> usuarios, int periodoConsumo)
+        {
+            ListaUsuario usuarioMayorConsumo = MayorPeriodoConsumoAgua(usuarios, periodoConsumo);
+
+            if (usuarioMayorConsumo != null)
+            {
+                Console.WriteLine($"Cédula: {usuarioMayorConsumo.cedula}");
+                Console.WriteLine($"Nombre: {usuarioMayorConsumo.nombre}");
+                Console.WriteLine($"Apellido: {usuarioMayorConsumo.apellido}");
+            }
+            else
+            {
+                Console.WriteLine("No se encontró ningún usuario para el periodo de consumo ingresado.");
+            }
+        }
+
+        public static ListaUsuario MayorPeriodoConsumoAgua(List<ListaUsuario> usuarios, int periodoConsumo)
+        {
+
+            ListaUsuario usuarioMayorConsumo = null;
+            int mayorConsumo = 0;
+
+            foreach (var usuario in usuarios)
+            {
+                if (usuario.periodo_consumo == periodoConsumo)
+                {
+                    if (usuarioMayorConsumo == null || usuario.consumo_actual_agua > mayorConsumo)
+                    {
+                        usuarioMayorConsumo = usuario;
+                        mayorConsumo = usuario.consumo_actual_agua;
+                    }
+                }
+            }
+            return usuarioMayorConsumo;
+        }
+
     }
 }
